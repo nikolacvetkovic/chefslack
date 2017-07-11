@@ -56,14 +56,6 @@ userSchema.plugin(passportLocalMongoose);
 
 var User = mongoose.model("User", userSchema);
 
-// User.register(new User({username: "cvele"}), "rucak", function(err, user) {
-//     if(err){
-//         console.log(err);
-//     } else {
-//         console.log(user);
-//     }
-// });
-
 var orderSchema = new mongoose.Schema({
    user: String,
    date: String
