@@ -9,10 +9,9 @@ var     express                 = require("express"),
         request                 = require("request"),
         server                  = express();
         
-var DATABASEURL = "mongodb://cvele:xtr1505@ds123662.mlab.com:23662/chef";
-var SLACKURL = "https://hooks.slack.com/services/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";
 
-mongoose.connect("mongodb://localhost/slackchef");
+
+mongoose.connect(process.env.DATABASEURL);
 
 /* STATIC ARRAY FOR DAYS IN WEEK */
 var daysInWeek = {
@@ -104,7 +103,7 @@ passport.deserializeUser(User.deserializeUser());
 
 /* ROUTES */
 server.get("/", isLoggedIn, function(req, res){
-    Menu.findById(developBazaId, function(err, menu){
+    Menu.findById(process.env.MENUID, function(err, menu){
         if(err){
             console.log(err);
             res.redirect("/result");
@@ -213,13 +212,12 @@ function createFinalMessage(orders){
     };
     return jsonObject;
 }
-var developBazaId = "596515073575f2daddd2eaf5";
-//5961048fae242009fbd5d4df pravi ID
+
 function sendMorningMessageSlack(){
     var date = new Date();
     var day = daysInWeek[date.getDay()];
     if(day !== undefined){
-        Menu.findById(developBazaId, function(err, menu){
+        Menu.findById(process.env.MENUID, function(err, menu){
             if(err){
                 console.log(err);
             } else {
@@ -227,7 +225,7 @@ function sendMorningMessageSlack(){
                 var message = createMorningMessage(meal);
                 // REQUEST
                 request({
-                    uri: SLACKURL,
+                    uri: process.env.SLACKURL,
                     method: "POST",
                     json: message
                 }, function(error, response, body){
@@ -251,10 +249,9 @@ function sendFinalMessageSlack(){
         if(err){
             console.log(err);
         } else {
-            console.log(orders.length);
             var message = createFinalMessage(orders);
             request({
-                uri: SLACKURL,
+                uri: process.env.SLACKURL,
                 method: "POST",
                 json: message
             }, function(error, response, body) {
