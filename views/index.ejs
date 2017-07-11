@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>WebCentric Ručak</title>
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu:400,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+</head>
+<body>
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h1 id="title">Unos menija</h1>
+            </div>
+        </div>
+        <form class="form-horizontal" action="/menu/<%= menu._id%>" method="post">
+            <div class="form-group">
+                <div class=" col-md-1 control-label">
+                    <label>Ponedeljak: </label>
+                </div>
+                <div class="col-md-1"></div>
+                <div class="col-md-8">
+                    <input class="form-control" type="text" name="menu[monday]" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-1 control-label">
+                    <label>Utorak: </label>
+                </div>
+                <div class="col-md-1"></div>
+                <div class="col-md-8">
+                    <input  class="form-control" type="text" name="menu[tuesday]" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-1 control-label">
+                    <label>Sreda: </label>
+                </div>
+                <div class="col-md-1"></div>
+                <div class="col-md-8">
+                    <input  class="form-control" type="text" name="menu[wednesday]" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-1 control-label">
+                    <label>Četvrtak: </label>
+                </div>
+                <div class="col-md-1"></div>
+                <div class="col-md-8">
+                    <input  class="form-control" type="text" name="menu[thursday]" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-1 control-label">
+                    <label>Petak: </label>
+                </div>
+                <div class="col-md-1"></div>
+                <div class="col-md-8">
+                    <input  class="form-control" type="text" name="menu[friday]" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-5 col-md-2">
+                    <button id="menu-button" class="btn btn-lg btn-block btn-warning">Pošalji</button>
+                </div>
+            </div>
+        </form>
+        
+        
+        <h2 class="text-center" style="padding-top: 50px;">Trenutni meni:</h2>
+        <div class="row">
+            <div class="col-md-offset-4 col-md-4">
+            <table class="table">
+                <tr></tr>
+                <tr>
+                    <td>Ponedeljak</td><td><%= menu.monday%></td>
+                </tr>
+                <tr>
+                    <td>Utorak</td><td><%= menu.tuesday%></td>
+                </tr>
+                <tr>
+                    <td>Sreda</td><td><%= menu.wednesday%></td>
+                </tr>
+                <tr>
+                    <td>Četvrtak</td><td><%= menu.thursday%></td>
+                </tr>
+                <tr>
+                    <td>Petak</td><td><%= menu.friday%></td>
+                </tr>
+            </table>
+            </div>
+            <div class="col-md-4">
+            </div>
+        </div>
+    </div>
+    
+<script
+    src="https://code.jquery.com/jquery-3.2.1.min.js"
+    integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+    crossorigin="anonymous"></script>
+<script 
+    src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+    integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" 
+    crossorigin="anonymous"></script>
+</body>
+</html>

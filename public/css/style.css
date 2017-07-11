@@ -1,0 +1,52 @@
+body {
+    background-image: url(https://source.unsplash.com/C1fMH2Vej8A);
+    background-repeat: no-repeat;
+    background-size: cover;
+    font-family: Ubuntu;
+    color: white;
+}
+
+div.container {
+    opacity: 1;
+    background-color: rgba(20, 20, 20, 0.5);
+    margin-top: 80px;
+}
+
+#login-form {
+    width: 600px;
+}
+
+#title {
+    padding-bottom: 40px; 
+    padding-top: 30px;
+    letter-spacing: 0.02em;
+}
+
+td {
+    font-weight: bold;
+    text-align: center;
+}
+    
+td:nth-of-type(2n) {
+    font-weight: normal;
+}
+
+button {
+    margin-top: 10px;
+}
+
+#login-button {
+    margin-top: 30px;
+}
+
+a.btn-block {
+    margin-bottom: 30px;
+}
+
+#menu-button {
+    margin: 10 auto 0 auto; 
+}
+
+div.col-md-1 {
+    padding-left: 60px;
+}
