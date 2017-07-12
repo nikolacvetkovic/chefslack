@@ -257,6 +257,8 @@ function sendFinalMessageSlack(){
     });
 }
 
+var morningJob = schedule.scheduleJob("0 5 23 * * 1-5", sendMorningMessageSlack());
+
 /* -------------------------------------------------------------------------- */
 server.listen(process.env.PORT, process.env.IP, function(){
     console.log("Listening..."); 
