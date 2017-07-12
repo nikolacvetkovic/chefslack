@@ -5,8 +5,10 @@ var     express                 = require("express"),
         passport                = require("passport"),
         LocalStrategy           = require("passport-local"),
         passportLocalMongoose   = require("passport-local-mongoose"),
-        schedule                = require("node-schedule"),
+        cron                    = require("cron"),
         request                 = require("request"),
+        cronJob                 = cron.CronJob,
+        schedule                = require("schedule"),
         server                  = express();
         
 
@@ -194,7 +196,7 @@ function createMorningMessage(meal){
 }
 
 function createFinalMessage(orders){
-    var message = "Broj porudžbina: *" + orders.length +"*" + "\nNaručioci: \n";
+    var message = ":chef: Broj porudžbina: *" + orders.length +"*" + "\nNaručioci: \n";
     
     orders.forEach(function(order, index){
         message = message + (index+1) +". " + order.user + "\n";
@@ -257,7 +259,15 @@ function sendFinalMessageSlack(){
     });
 }
 
-var morningJob = schedule.scheduleJob("0 5 23 * * 1-5", sendMorningMessageSlack());
+// var morningJob = new cronJob("00 26 23 * * 1-5", sendMorningMessageSlack, 
+//     function(){
+//     console.log("Morning message sent.");
+//     },
+//     true,
+//     'Europe/Belgrade'
+// );
+
+var morningJob = schedule.scheduleJob("00 26 23 * * 1-5", sendFinalMessageSlack);
 
 /* -------------------------------------------------------------------------- */
 server.listen(process.env.PORT, process.env.IP, function(){
