@@ -151,16 +151,6 @@ server.get("/logout", function(req, res) {
     res.redirect("/login");
 });
 
-
-/////////////////////////////////////////
-
-server.get("/meal", function(req, res) {
-    // sendMorningMessageSlack();
-    sendFinalMessageSlack();
-    res.send("cao");
-});
-
-
 /* ************************************ */
 function isLoggedIn(req, res, next){
     if(req.isAuthenticated()){
