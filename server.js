@@ -8,7 +8,7 @@ var     express                 = require("express"),
         cron                    = require("cron"),
         request                 = require("request"),
         cronJob                 = cron.CronJob,
-        schedule                = require("schedule"),
+        schedule                = require("node-schedule"),
         server                  = express();
         
 
@@ -267,7 +267,7 @@ function sendFinalMessageSlack(){
 //     'Europe/Belgrade'
 // );
 
-var morningJob = schedule.scheduleJob("00 26 23 * * 1-5", sendFinalMessageSlack);
+var morningJob = schedule.scheduleJob("00 30 23 * * 1-5", sendFinalMessageSlack);
 
 /* -------------------------------------------------------------------------- */
 server.listen(process.env.PORT, process.env.IP, function(){
