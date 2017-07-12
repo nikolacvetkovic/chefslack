@@ -259,16 +259,11 @@ function sendFinalMessageSlack(){
     });
 }
 
-// var morningJob = new cronJob("00 26 23 * * 1-5", sendMorningMessageSlack, 
-//     function(){
-//     console.log("Morning message sent.");
-//     },
-//     true,
-//     'Europe/Belgrade'
-// );
+/* CRON JOBS */
 
-var morningJob = schedule.scheduleJob("00 37 23 * * 1-5", sendFinalMessageSlack);
+var morningJob = schedule.scheduleJob("0 0 9 * * 1-5", sendMorningMessageSlack);
 
+var finalJob = schedule.scheduleJob("00 30 10 * * 1-5", sendFinalMessageSlack);
 /* -------------------------------------------------------------------------- */
 server.listen(process.env.PORT, process.env.IP, function(){
     console.log("Listening..."); 
