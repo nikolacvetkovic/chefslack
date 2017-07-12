@@ -267,7 +267,7 @@ function sendFinalMessageSlack(){
 //     'Europe/Belgrade'
 // );
 
-var morningJob = schedule.scheduleJob("00 30 23 * * 1-5", sendFinalMessageSlack);
+var morningJob = schedule.scheduleJob("00 37 23 * * 1-5", sendFinalMessageSlack);
 
 /* -------------------------------------------------------------------------- */
 server.listen(process.env.PORT, process.env.IP, function(){
