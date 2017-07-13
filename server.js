@@ -250,10 +250,10 @@ function sendFinalMessageSlack(){
 }
 
 /* CRON JOBS */
-
 var morningJob = schedule.scheduleJob("0 0 9 * * 1-5", sendMorningMessageSlack);
 
-var finalJob = schedule.scheduleJob("00 30 10 * * 1-5", sendFinalMessageSlack);
+var finalJob = schedule.scheduleJob("0 30 10 * * 1-5", sendFinalMessageSlack);
+
 /* -------------------------------------------------------------------------- */
 server.listen(process.env.PORT, process.env.IP, function(){
     console.log("Listening..."); 
