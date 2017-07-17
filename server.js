@@ -249,8 +249,23 @@ function sendFinalMessageSlack(){
     });
 }
 
+function wakeUp(){
+    request("http://slackchef.herokuapp.com", function(error, response, body) {
+        if(error){
+            console.log(error);
+        } else {
+            console.log(response.statusCode);
+        }
+    });
+}
+
 /* CRON JOBS */
 var morningJob = schedule.scheduleJob("0 0 9 * * 1-5", sendMorningMessageSlack);
+
+var pingJob1 = schedule.scheduleJob("0 15 9 * * 1-5", wakeUp); 
+var pingJob2 = schedule.scheduleJob("0 40 9 * * 1-5", wakeUp); 
+var pingJob3 = schedule.scheduleJob("0 0 10 * * 1-5", wakeUp); 
+var pingJob3 = schedule.scheduleJob("0 20 10 * * 1-5", wakeUp); 
 
 var finalJob = schedule.scheduleJob("0 30 10 * * 1-5", sendFinalMessageSlack);
 
