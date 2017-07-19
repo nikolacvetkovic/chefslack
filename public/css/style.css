@@ -47,6 +47,20 @@ a.btn-block {
     margin: 10 auto 0 auto; 
 }
 
-div.col-md-1 {
-    padding-left: 60px;
+#first-column {
+    padding-left: 40px;
+}
+
+input[type=checkbox] {
+    width: 20px;
+    height: 20px;
+    margin: 8px auto 0 auto;
+}
+
+#mondayOptions, #tuesdayOptions, #wednesdayOptions, #thursdayOptions, #fridayOptions {
+    display: none;
+}
+
+.different-color {
+    color: rgb(236, 151, 31);
 }

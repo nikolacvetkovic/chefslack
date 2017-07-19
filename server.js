@@ -60,7 +60,8 @@ var User = mongoose.model("User", userSchema);
 
 var orderSchema = new mongoose.Schema({
    user: String,
-   date: String
+   date: String,
+   option: String
 });
 
 var Order = mongoose.model("Order", orderSchema);
@@ -77,6 +78,62 @@ var Order = mongoose.model("Order", orderSchema);
 //         console.log(order);
 //     }
 // });
+
+var optionSchema = new mongoose.Schema({
+    monday: {
+        option1: String,
+        option2: String
+    },
+    tuesday: {
+        option1: String,
+        option2: String
+    },
+    wednesday: {
+        option1: String,
+        option2: String
+    },
+    thursday: {
+        option1: String,
+        option2: String
+    },
+    friday: {
+        option1: String,
+        option2: String
+    }
+});
+
+var Option = mongoose.model("Option", optionSchema);
+
+var option = {
+                monday: {
+                    option1: undefined,
+                    option2: undefined
+                },
+                tuesday:{
+                    option1: undefined,
+                    option2: undefined
+                },
+                wednesday:{
+                    option1: undefined,
+                    option2: undefined
+                },
+                thursday:{
+                    option1: undefined,
+                    option2: undefined
+                },
+                friday:{
+                    option1: "testenina",
+                    option2: "pire krompir"
+                }
+            };
+            
+Option.create(option, function(err, option) {
+    if(err){
+        console.log(err);
+    } else {
+        console.log(option);
+    }
+});
 
 /* SETTINGS */
 server.set("view engine", "ejs");
@@ -102,18 +159,85 @@ server.get("/", isLoggedIn, function(req, res){
             console.log(err);
             res.redirect("/result");
         } else {
-            res.render("index", {menu: menu});
+            Option.findById(process.env.OPTIONID, function(err, options){
+                if(err){
+                    console.log(err);
+                    res.redirect("/result");
+                } else {
+                    res.render("index", {menu: menu, options: options});
+                }
+            });
         }
     }); 
 });
 
-server.post("/menu/:id", isLoggedIn, function(req, res){
-    Menu.findByIdAndUpdate(req.params.id, req.body.menu, function(err, updatedMenu){
+server.post("/menu/:menuId/:optionId", isLoggedIn, function(req, res){
+    Menu.findByIdAndUpdate(req.params.menuId, req.body.menu, function(err, updatedMenu){
         if(err){
             console.log(err);
             res.render("result", {message: "Neuspešna promena podataka."});
         } else {
-            res.render("result", {message: "Uspešna promena podataka."});   
+            var mondayOpt1, mondayOpt2, tuesdayOpt1, tuesdayOpt2, wednesdayOpt1, wednesdayOpt2, thursdayOpt1, thursdayOpt2, fridayOpt1, fridayOpt2 = undefined;
+            if(req.body.mondayOpt1 !== ""){
+                mondayOpt1 = req.body.mondayOpt1;
+            }
+            if(req.body.mondayOpt2 !== ""){
+                mondayOpt2 = req.body.mondayOpt2;
+            }
+            if(req.body.tuesdayOpt1 !== ""){
+                tuesdayOpt1 = req.body.tuesdayOpt1;
+            }
+            if(req.body.tuesdayOpt2 !== ""){
+                tuesdayOpt2 = req.body.tuesdayOpt2;
+            }
+            if(req.body.wednesdayOpt1 !== ""){
+                wednesdayOpt1 = req.body.wednesdayOpt1;
+            }
+            if(req.body.wednesdayOpt2 !== ""){
+                wednesdayOpt2 = req.body.wednesdayOpt2;
+            }
+            if(req.body.thursdayOpt1 !== ""){
+                thursdayOpt1 = req.body.thursdayOpt1;
+            }
+            if(req.body.thursdayOpt2 !== ""){
+                thursdayOpt2 = req.body.thursdayOpt2;
+            }
+            if(req.body.fridayOpt1 !== ""){
+                fridayOpt1 = req.body.fridayOpt1;
+            }
+            if(req.body.fridayOpt2 !== ""){
+                fridayOpt2 = req.body.fridayOpt2;
+            }
+            var option = {
+                monday:{
+                    option1: mondayOpt1,
+                    option2: mondayOpt2
+                },
+                tuesday:{
+                    option1: tuesdayOpt1,
+                    option2: tuesdayOpt2
+                },
+                wednesday:{
+                    option1: wednesdayOpt1,
+                    option2: wednesdayOpt2
+                },
+                thursday:{
+                    option1: thursdayOpt1,
+                    option2: thursdayOpt2
+                },
+                friday:{
+                    option1: fridayOpt1,
+                    option2: fridayOpt2
+                }
+            };
+            Option.findByIdAndUpdate(req.params.optionId, option, function(err, updatedOption){
+                if(err){
+                    console.log(err);
+                    res.render("result", {message: "Neuspešna promena podataka."});
+                } else {
+                    res.render("result", {message: "Uspešna promena podataka."});
+                }
+            });
         }
     });
 });
@@ -121,19 +245,43 @@ server.post("/menu/:id", isLoggedIn, function(req, res){
 server.post("/order", function(req, res) {
     var date = new Date();
     var dateString = date.toDateString();
+    var day = daysInWeek[date.getDay()];
     var json = JSON.parse(req.body.payload);
     var user = json.user.name;
-    Order.create({
-        user: user,
-        date: dateString
-    }, function(err, order){
+    var option = json.actions[0].value;
+    Option.findById(process.env.OPTIONID, function(err, options) {
         if(err){
             console.log(err);
         } else {
-            console.log(order);
-            res.status(200).end();
+            if(option === options[day].option1 || option === options[day].option2){
+                Order.create({
+                    user: user,
+                    date: dateString,
+                    option: option
+                }, function(err, order){
+                    if(err){
+                        console.log(err);
+                    } else {
+                        console.log(order);
+                        res.status(200).end();
+                    }
+                });
+            } else {
+                Order.create({
+                    user: user,
+                    date: dateString,
+                    option: undefined
+                }, function(err, order){
+                    if(err){
+                        console.log(err);
+                    } else {
+                        console.log(order);
+                        res.status(200).end();
+                    }
+                });
+            }
         }
-    });
+    })
 });
 
 server.get("/login", function(req, res){
@@ -159,7 +307,7 @@ function isLoggedIn(req, res, next){
     res.redirect("/login");
 }
 
-function createMorningMessage(meal){
+function createMorningMessage(meal, option1, option2){
     var jsonObject = { 
         text : ":chef: Dobro jutro. Danas na meniju:",
         attachments: [
@@ -170,27 +318,63 @@ function createMorningMessage(meal){
                     color: "#f49b42",
                     mrkdwn_in: ["text"],
                     attachment_type: "default",
-                    actions: [
-                        {
-                            name: "order",
-                            text: "Poruči",
-                            style: "primary",
-                            type: "button",
-                            value: "dodajme"
-                        }
-                    ]
+                    actions: []
                 }
             ]
     };
+    if(option1 !== null){
+        jsonObject.text = ":chef: Dobro jutro. Danas na meniju: *" + meal + "*."
+        jsonObject.attachments[0].text = "Prilozi:\n*Opcija 1:* "+option1+"    *Opcija 2:* "+option2;
+        jsonObject.attachments[0].actions.push({
+            name: "order1",
+            text: "Poruči opciju 1",
+            style: "primary",
+            type: "button",
+            value: option1
+        });
+        jsonObject.attachments[0].actions.push({
+            name: "order2",
+            text: "Poruči opciju 2",
+            style: "danger",
+            type: "button",
+            value: option2
+        });
+    } else {
+        jsonObject.attachments[0].actions.push({
+            name: "order",
+            text: "Poruči",
+            style: "primary",
+            type: "button",
+            value: "dodajme"
+        });
+    }
     return jsonObject;
 }
 
-function createFinalMessage(orders){
-    var message = ":chef: Broj porudžbina: *" + orders.length +"*" + "\nNaručioci: \n";
+function createFinalMessage(orders, option1, option2){
     
-    orders.forEach(function(order, index){
-        message = message + (index+1) +". " + order.user + "\n";
-    });
+    if(option1 !== null){
+        var countOrder1 = 0;
+        var countOrder2 = 0;
+        orders.forEach(function(order) {
+            if(order.option === option1){
+                countOrder1++;
+            }
+            if(order.option === option2){
+                countOrder2++;
+            }
+        })
+        var message = ":chef: Broj porudžbina -> "+ option1.capitalizeFirstLetter() +": *" + countOrder1 +"*   "+ option2.capitalizeFirstLetter() + ": *" + countOrder2 +"*\nNaručioci:\n";
+        orders.forEach(function(order, index){
+            message = message + (index+1) +". " + order.user + " - "+ order.option + "\n";
+        });
+    } else {
+        var message = ":chef: Broj porudžbina: *" + orders.length +"*" + "\nNaručioci: \n";
+        orders.forEach(function(order, index){
+            message = message + (index+1) +". " + order.user + "\n";
+        });
+    }
+    
     var jsonObject = {
         text : message
     };
@@ -205,23 +389,29 @@ function sendMorningMessageSlack(){
             if(err){
                 console.log(err);
             } else {
-                var meal = menu[day];
-                var message = createMorningMessage(meal);
-                // REQUEST
-                request({
-                    uri: process.env.SLACKURL,
-                    method: "POST",
-                    json: message
-                }, function(error, response, body){
-                    if(error){
-                        console.log(error);
+                Option.findById(process.env.OPTIONID, function(err, options){
+                    if(err){
+                        console.log(err);
                     } else {
-                        console.log(response.statusCode);
-                    }    
-                });
-                
+                        var option1 = options[day].option1;
+                        var option2 = options[day].option2;
+                        var meal = menu[day];
+                        var message = createMorningMessage(meal, option1, option2);
+                        // REQUEST
+                        request({
+                            uri: process.env.SLACKURL,
+                            method: "POST",
+                            json: message
+                        }, function(error, response, body){
+                            if(error){
+                                console.log(error);
+                            } else {
+                                console.log(response.statusCode);
+                            }    
+                        });
+                    }
+                })
             }
-            
         });
     }
 }
@@ -229,25 +419,39 @@ function sendMorningMessageSlack(){
 function sendFinalMessageSlack(){
     var date = new Date();
     var dateString = date.toDateString();
+    var day = daysInWeek[date.getDay()];
     Order.find({date: dateString}, function(err, orders){
         if(err){
             console.log(err);
         } else {
-            var message = createFinalMessage(orders);
-            request({
-                uri: process.env.SLACKURL,
-                method: "POST",
-                json: message
-            }, function(error, response, body) {
-                if(error){
-                console.log(error);
-            } else {
-                console.log(response.statusCode);
-            }
+            Option.findById(process.env.OPTIONID, function(err, options) {
+                if(err){
+                    console.log(err);
+                } else {
+                    var option1 = options[day].option1;
+                    var option2 = options[day].option2;
+                    var message = createFinalMessage(orders, option1, option2);
+                    // REQUEST
+                    request({
+                        uri: process.env.SLACKURL,
+                        method: "POST",
+                        json: message
+                    }, function(error, response, body) {
+                        if(error){
+                        console.log(error);
+                    } else {
+                        console.log(response.statusCode);
+                    }
+                    });
+                }
             });
         }
     });
 }
+
+String.prototype.capitalizeFirstLetter = function() {
+    return this.charAt(0).toUpperCase() + this.slice(1);
+};
 
 function wakeUp(){
     request("http://slackchef.herokuapp.com", function(error, response, body) {
