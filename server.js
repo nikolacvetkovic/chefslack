@@ -104,36 +104,36 @@ var optionSchema = new mongoose.Schema({
 
 var Option = mongoose.model("Option", optionSchema);
 
-var option = {
-                monday: {
-                    option1: undefined,
-                    option2: undefined
-                },
-                tuesday:{
-                    option1: undefined,
-                    option2: undefined
-                },
-                wednesday:{
-                    option1: undefined,
-                    option2: undefined
-                },
-                thursday:{
-                    option1: undefined,
-                    option2: undefined
-                },
-                friday:{
-                    option1: "testenina",
-                    option2: "pire krompir"
-                }
-            };
+// var option = {
+//                 monday: {
+//                     option1: undefined,
+//                     option2: undefined
+//                 },
+//                 tuesday:{
+//                     option1: undefined,
+//                     option2: undefined
+//                 },
+//                 wednesday:{
+//                     option1: undefined,
+//                     option2: undefined
+//                 },
+//                 thursday:{
+//                     option1: undefined,
+//                     option2: undefined
+//                 },
+//                 friday:{
+//                     option1: "testenina",
+//                     option2: "pire krompir"
+//                 }
+//             };
             
-Option.create(option, function(err, option) {
-    if(err){
-        console.log(err);
-    } else {
-        console.log(option);
-    }
-});
+// Option.create(option, function(err, option) {
+//     if(err){
+//         console.log(err);
+//     } else {
+//         console.log(option);
+//     }
+// });
 
 /* SETTINGS */
 server.set("view engine", "ejs");
