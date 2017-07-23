@@ -243,7 +243,7 @@ server.post("/menu/:menuId/:optionId", isLoggedIn, function(req, res){
 });
 
 server.post("/order", function(req, res) {
-    var date = new Date(2017, 6, 24);
+    var date = new Date();
     var dateString = date.toDateString();
     var day = daysInWeek[date.getDay()];
     var json = JSON.parse(req.body.payload);
@@ -409,7 +409,7 @@ function createFinalMessage(orders, option1, option2){
 }
 
 function sendMorningMessageSlack(){
-    var date = new Date(2017, 6, 24);
+    var date = new Date();
     var day = daysInWeek[date.getDay()];
     if(day !== undefined){
         Menu.findById(process.env.MENUID, function(err, menu){
@@ -444,7 +444,7 @@ function sendMorningMessageSlack(){
 }
 
 function sendFinalMessageSlack(){
-    var date = new Date(2017, 6, 24);
+    var date = new Date();
     var dateString = date.toDateString();
     var day = daysInWeek[date.getDay()];
     Order.find({date: dateString}, function(err, orders){
