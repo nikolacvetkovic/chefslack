@@ -36,20 +36,6 @@ var menuSchema = new mongoose.Schema({
 
 var Menu = mongoose.model("Menu", menuSchema);
 
-// Menu.create({
-//     monday: "Ćufte",
-//     tuesday: "Musaka",
-//     wednesday: "Prebranac",
-//     thursday: "Pene sa parmezanom",
-//     friday: "Gulaš"
-// }, function(err, menu){
-//     if(err){
-//         console.log(err);
-//     } else {
-//         console.log(menu);
-//     }
-// });
-
 var userSchema = new mongoose.Schema({
     username: String,
     password: String
@@ -65,19 +51,6 @@ var orderSchema = new mongoose.Schema({
 });
 
 var Order = mongoose.model("Order", orderSchema);
-
-// var date = new Date();
-// var dateString = date.toDateString();
-// Order.create({
-//     user: "cvele",
-//     date: dateString
-// }, function(err, order){
-//     if(err){
-//         console.log(err);
-//     } else {
-//         console.log(order);
-//     }
-// });
 
 var optionSchema = new mongoose.Schema({
     monday: {
@@ -103,37 +76,6 @@ var optionSchema = new mongoose.Schema({
 });
 
 var Option = mongoose.model("Option", optionSchema);
-
-// var option = {
-//                 monday: {
-//                     option1: undefined,
-//                     option2: undefined
-//                 },
-//                 tuesday:{
-//                     option1: undefined,
-//                     option2: undefined
-//                 },
-//                 wednesday:{
-//                     option1: undefined,
-//                     option2: undefined
-//                 },
-//                 thursday:{
-//                     option1: undefined,
-//                     option2: undefined
-//                 },
-//                 friday:{
-//                     option1: "testenina",
-//                     option2: "pire krompir"
-//                 }
-//             };
-            
-// Option.create(option, function(err, option) {
-//     if(err){
-//         console.log(err);
-//     } else {
-//         console.log(option);
-//     }
-// });
 
 /* SETTINGS */
 server.set("view engine", "ejs");
@@ -249,7 +191,6 @@ server.post("/order", function(req, res) {
     var json = JSON.parse(req.body.payload);
     var user = json.user.name;
     var option = json.actions[0].value;
-    console.log(json.user.id);
     Option.findById(process.env.OPTIONID, function(err, options) {
         if(err){
             console.log(err);
@@ -315,16 +256,6 @@ server.get("/logout", function(req, res) {
     req.logout();
     res.redirect("/login");
 });
-
-// server.get("/morning", function(req, res) {
-//     sendMorningMessageSlack();
-//     res.send("Morning");
-// })
-
-// server.get("/final", function(req, res) {
-//     sendFinalMessageSlack();
-//     res.send("Final");
-// })
 
 /* ************************************ */
 function isLoggedIn(req, res, next){
@@ -481,7 +412,7 @@ String.prototype.capitalizeFirstLetter = function() {
 };
 
 function wakeUp(){
-    request("http://slackchef.herokuapp.com", function(error, response, body) {
+    request(process.env.MYURL, function(error, response, body) {
         if(error){
             console.log(error);
         } else {
