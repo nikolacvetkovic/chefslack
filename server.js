@@ -243,12 +243,13 @@ server.post("/menu/:menuId/:optionId", isLoggedIn, function(req, res){
 });
 
 server.post("/order", function(req, res) {
-    var date = new Date();
+    var date = new Date(2017, 6, 24);
     var dateString = date.toDateString();
     var day = daysInWeek[date.getDay()];
     var json = JSON.parse(req.body.payload);
     var user = json.user.name;
     var option = json.actions[0].value;
+    console.log(json.user.id);
     Option.findById(process.env.OPTIONID, function(err, options) {
         if(err){
             console.log(err);
@@ -264,6 +265,14 @@ server.post("/order", function(req, res) {
                     } else {
                         console.log(order);
                         res.status(200).end();
+                        var url = "https://slack.com/api/chat.postMessage?token="+process.env.TOKEN+"&channel="+json.user.id+"&text=Uspešno ste poručili&as_user=true";
+                        request(encodeURI(url), function(error, response, body) {
+                            if(error){
+                                console.log(error);
+                            } else {
+                                console.log(response.statusCode);
+                            }
+                        });
                     }
                 });
             } else {
@@ -277,6 +286,14 @@ server.post("/order", function(req, res) {
                     } else {
                         console.log(order);
                         res.status(200).end();
+                        var url = "https://slack.com/api/chat.postMessage?token="+process.env.TOKEN+"&channel="+json.user.id+"&text=Uspešno ste poručili&as_user=true";
+                        request(encodeURI(url), function(error, response, body) {
+                            if(error){
+                                console.log(error);
+                            } else {
+                                console.log(response.statusCode);
+                            }
+                        });
                     }
                 });
             }
@@ -298,6 +315,16 @@ server.get("/logout", function(req, res) {
     req.logout();
     res.redirect("/login");
 });
+
+// server.get("/morning", function(req, res) {
+//     sendMorningMessageSlack();
+//     res.send("Morning");
+// })
+
+// server.get("/final", function(req, res) {
+//     sendFinalMessageSlack();
+//     res.send("Final");
+// })
 
 /* ************************************ */
 function isLoggedIn(req, res, next){
@@ -382,7 +409,7 @@ function createFinalMessage(orders, option1, option2){
 }
 
 function sendMorningMessageSlack(){
-    var date = new Date();
+    var date = new Date(2017, 6, 24);
     var day = daysInWeek[date.getDay()];
     if(day !== undefined){
         Menu.findById(process.env.MENUID, function(err, menu){
@@ -417,7 +444,7 @@ function sendMorningMessageSlack(){
 }
 
 function sendFinalMessageSlack(){
-    var date = new Date();
+    var date = new Date(2017, 6, 24);
     var dateString = date.toDateString();
     var day = daysInWeek[date.getDay()];
     Order.find({date: dateString}, function(err, orders){
